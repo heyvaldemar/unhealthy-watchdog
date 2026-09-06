@@ -1,0 +1,13 @@
+[Unit]
+Description=Restart containers that are running and unhealthy
+Documentation=https://github.com/heyvaldemar/unhealthy-watchdog
+After=docker.service
+Requires=docker.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/unhealthy-watchdog.sh
+# Bounded: a run wedged on an unresponsive daemon should fail its unit and be
+# visible in `systemctl --failed`, not sit in "activating" while nothing is
+# being watched.
+TimeoutStartSec=10m

@@ -1,0 +1,38 @@
+name: Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: '0 5 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: Lint the shell and the units
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - name: ShellCheck
+        run: |
+          docker run --rm -v "$PWD:/mnt" -w /mnt koalaman/shellcheck:v0.11.0 \
+            unhealthy-watchdog.sh tests/e2e-watchdog.sh
+      - name: systemd accepts the units
+        run: systemd-analyze verify ./unhealthy-watchdog.timer 2>&1 | grep -v 'Failed to prepare' || true
+
+  scenarios:
+    name: Eight scenarios against real containers
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - name: Run the suite
+        # Most of these are about what it refuses to touch. A watchdog that
+        # restarts a container somebody stopped, or one still installing, is
+        # worse than none: it hides the problem and fights the operator.
+        run: |
+          chmod +x tests/e2e-watchdog.sh
+          ./tests/e2e-watchdog.sh

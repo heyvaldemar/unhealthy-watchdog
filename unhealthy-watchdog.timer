@@ -1,0 +1,10 @@
+[Unit]
+Description=Look for containers that are running and unhealthy
+
+[Timer]
+OnBootSec=5min
+OnUnitActiveSec=2min
+AccuracySec=30s
+
+[Install]
+WantedBy=timers.target
