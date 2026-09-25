@@ -1,6 +1,7 @@
 # Unhealthy watchdog
 
 [![Tests](https://github.com/heyvaldemar/unhealthy-watchdog/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/heyvaldemar/unhealthy-watchdog/actions/workflows/tests.yml)
+[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/14906/badge)](https://www.bestpractices.dev/projects/14906)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Restarts a container whose process has died inside it — the one state docker leaves alone.
